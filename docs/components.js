@@ -1,13 +1,10 @@
 import React from 'react'
 import Base from '../src'
 import styled from '../src/styled'
-import { fontSize, space, color } from 'styled-system'
+import { compose, fontSize, space, color } from 'styled-system'
 
 export const Box = ({
   bold,
-  p,
-  color,
-  bg,
   css,
   ...props
 }) =>
@@ -15,11 +12,9 @@ export const Box = ({
     {...props}
     css={{
       fontWeight: bold ? 'bold' : null,
-      padding: p,
-      color: color,
-      backgroundColor: bg,
       ...css
     }}
+    mapStyles={compose(color, space)}
   />
 
 const inc = state => ({ count: state.count + 1 })

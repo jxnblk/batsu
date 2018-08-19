@@ -47,9 +47,12 @@ export const parse = (obj, children = '', media) => {
   }
 }
 
+const noop = () => {}
+
 export class Base extends React.Component {
   static propTypes = {
     css: PropTypes.object,
+    mapStyles: PropTypes.func,
     tag: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.func
@@ -58,11 +61,14 @@ export class Base extends React.Component {
 
   static getDerivedStateFromProps = (props, state) => {
     if (props.css === state.css) return null
-    const { className, rule } = parse(props.css)
+    const { mapStyles = noop } = props
+    const css = parse(props.css)
+    const styles = mapStyles(props)
+    const dynamic = parse(styles)
     return {
       css: props.css,
-      className,
-      rule
+      className: classnames(css.className, dynamic.className),
+      rule: css.rule + dynamic.rule
     }
   }
 
@@ -82,6 +88,7 @@ export class Base extends React.Component {
       tag: Tag = 'div',
       className,
       css = {},
+      mapStyles = noop,
       ...props
     } = this.props
     const { didMount, rule } = this.state
