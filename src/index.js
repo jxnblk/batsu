@@ -55,6 +55,8 @@ export class Base extends React.Component {
       PropTypes.func
     ]),
   }
+  
+  didMount = false;
 
   static getDerivedStateFromProps = (props, state) => {
     if (props.css === state.css) return null
@@ -74,7 +76,11 @@ export class Base extends React.Component {
   }
 
   componentDidMount () {
-    this.setState({ didMount: true })
+    this.didMount = true;
+  }
+
+  componentWillUnmount() {
+    this.didMount = false
   }
 
   render () {
@@ -84,7 +90,7 @@ export class Base extends React.Component {
       css = {},
       ...props
     } = this.props
-    const { didMount, rule } = this.state
+    const { rule } = this.state
 
     const style = <style
       dangerouslySetInnerHTML={{ __html: rule }}
@@ -92,7 +98,7 @@ export class Base extends React.Component {
 
     return (
       <React.Fragment>
-        {didMount ? createPortal(style, document.head) : style}
+        {this.didMount ? createPortal(style, document.head) : style}
         <Tag
           {...props}
           className={classnames(
