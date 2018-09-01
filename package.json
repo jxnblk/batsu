@@ -1,6 +1,6 @@
 {
   "name": "batsu",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Functional CSS-in-JS for React",
   "main": "dist/index.js",
   "scripts": {
